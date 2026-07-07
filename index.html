@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" href="/kee.png" type="image/x-icon">
+<title>Happy Birthday, Diamond</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600&family=Petit+Formal+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#151020;
+    --surface:#211a2d;
+    --surface-2:#2a2138;
+    --gold:#c9a35f;
+    --gold-bright:#e3c586;
+    --gold-dim:rgba(51, 38, 16, 0.35);
+    --rose:#cf94a4;
+    --cream:#f4ecdd;
+    --cream-dim:#cbb9c4;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+    font-family:'Inter', sans-serif;
+    background:var(--ink);
+  }
+
+  #app{
+    position:relative;
+    width:100%;
+    height:100vh;
+    height:100dvh;
+    overflow:hidden;
+  }
+
+  .bg-gradient{
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(201,163,95,0.10), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(207,148,164,0.10), transparent 50%),
+      radial-gradient(circle at 50% 100%, rgba(201,163,95,0.07), transparent 55%),
+      linear-gradient(180deg, #171123 0%, #120e1c 100%);
+    background-size:200% 200%;
+    animation:glowDrift 22s ease infinite;
+    z-index:0;
+  }
+  @keyframes glowDrift{
+    0%{ background-position:0% 0%, 100% 0%, 50% 100%; }
+    50%{ background-position:20% 20%, 70% 30%, 50% 80%; }
+    100%{ background-position:0% 0%, 100% 0%, 50% 100%; }
+  }
+
+  .grid-layer{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background-image:
+      linear-gradient(rgba(201,163,95,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,163,95,0.045) 1px, transparent 1px);
+    background-size:56px 56px;
+    mask-image:radial-gradient(circle at 50% 35%, rgba(0,0,0,0.85), transparent 72%);
+    -webkit-mask-image:radial-gradient(circle at 50% 35%, rgba(0,0,0,0.85), transparent 72%);
+    opacity:0.7;
+  }
+
+  #particleCanvas{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+
+  /* ---------- Falling petals (replaces heart/confetti spam) ---------- */
+  #petalLayer{ position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+  .petal{
+    position:absolute;
+    top:-30px;
+    opacity:0;
+    animation:petalFall linear infinite;
+    filter:drop-shadow(0 0 6px rgba(201,163,95,0.25));
+  }
+  @keyframes petalFall{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    8%{ opacity:0.85; }
+    92%{ opacity:0.6; }
+    100%{ transform:translateY(112vh) translateX(24px) rotate(200deg); opacity:0; }
+  }
+
+  .progress{
+    position:absolute;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:10px;
+    z-index:50;
+  }
+  .progress span{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:rgba(244,236,221,0.18);
+    transition:all 0.4s ease;
+  }
+  .progress span.active{
+    background:var(--gold-bright);
+    box-shadow:0 0 10px var(--gold-dim);
+    transform:scale(1.4);
+  }
+
+  .screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    z-index:10;
+  }
+  .screen.active{
+    display:flex;
+    animation:screenIn 0.8s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes screenIn{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .card{
+    background:linear-gradient(165deg, rgba(244,236,221,0.05), rgba(244,236,221,0.015));
+    border:1px solid var(--gold-dim);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-radius:6px;
+    padding:clamp(34px,5.5vw,56px) clamp(24px,5vw,52px);
+    max-width:600px;
+    width:100%;
+    box-shadow:0 30px 80px rgba(0,0,0,0.55);
+    position:relative;
+  }
+  /* thin gold corner accents — the signature motif, echoed on every screen */
+  .card::before, .card::after{
+    content:'';
+    position:absolute;
+    width:22px;
+    height:22px;
+    border:1px solid var(--gold);
+    opacity:0.8;
+  }
+  .card::before{ top:10px; left:10px; border-right:none; border-bottom:none; }
+  .card::after{ bottom:10px; right:10px; border-left:none; border-top:none; }
+
+  .ornament{
+    width:34px;
+    height:34px;
+    margin:0 auto 18px;
+    opacity:0.9;
+  }
+  .ornament svg{ width:100%; height:100%; }
+  .ornament path, .ornament circle, .ornament line{
+    stroke:var(--gold-bright);
+  }
+
+  .eyebrow{
+    display:block;
+    font-family:'Inter', sans-serif;
+    font-size:11px;
+    letter-spacing:3.5px;
+    text-transform:uppercase;
+    color:var(--gold-bright);
+    opacity:0.85;
+    margin-bottom:14px;
+    font-weight:500;
+  }
+
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(26px,5.4vw,42px);
+    color:var(--cream);
+    margin:6px 0 8px;
+    letter-spacing:0.2px;
+    font-weight:600;
+    line-height:1.28;
+    opacity:0;
+    animation:riseIn 0.9s ease 0.15s forwards;
+  }
+  .highlight{
+    color:var(--gold-bright);
+    font-style:italic;
+  }
+  .script{
+    font-family:'Petit Formal Script', cursive;
+    color:var(--gold-bright);
+    font-size:1.5em;
+  }
+
+  p.sub{
+    color:var(--cream-dim);
+    font-size:clamp(14.5px,2.2vw,16.5px);
+    line-height:1.75;
+    margin:14px 0 30px;
+    opacity:0;
+    animation:riseIn 0.9s ease 0.4s forwards;
+    font-weight:400;
+  }
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(12px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .divider{
+    width:56px;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin:2px auto 22px;
+    opacity:0.8;
+  }
+
+  /* ---------- Date plan tiles ---------- */
+  .date-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(14px,3vw,20px);
+    margin:4px 0 30px;
+  }
+  .date-tile{
+    background:rgba(244,236,221,0.03);
+    border:1px solid var(--gold-dim);
+    border-radius:4px;
+    padding:clamp(18px,3.4vw,24px) clamp(12px,2.6vw,18px);
+    opacity:0;
+    animation:riseIn 0.9s ease 0.55s forwards;
+    transition:transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+  .date-tile:hover{
+    transform:translateY(-4px);
+    border-color:var(--gold);
+    background:rgba(244,236,221,0.05);
+  }
+  .date-tile .icon{
+    font-size:clamp(24px,5vw,30px);
+    display:block;
+    margin-bottom:10px;
+    opacity:0.9;
+  }
+  .date-tile h3{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(15px,2.6vw,18px);
+    color:var(--cream);
+    margin:2px 0 8px;
+    font-weight:600;
+    letter-spacing:0.3px;
+  }
+  .date-tile p{
+    font-size:clamp(11.5px,2.1vw,12.5px);
+    color:var(--cream-dim);
+    margin:0;
+    line-height:1.55;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn-row{
+    position:relative;
+    display:flex;
+    gap:clamp(14px,4vw,26px);
+    justify-content:center;
+    margin-top:6px;
+    flex-wrap:wrap;
+    min-height:60px;
+  }
+
+  button{
+    border:none;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    font-size:clamp(13.5px,2.3vw,15px);
+    font-weight:600;
+    letter-spacing:0.4px;
+    padding:clamp(13px,2.6vw,16px) clamp(28px,5vw,42px);
+    border-radius:2px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, left 0.22s ease, top 0.22s ease, background 0.2s ease;
+    white-space:nowrap;
+  }
+
+  .btn-primary{
+    background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+    color:#211a2d;
+    box-shadow:0 10px 24px rgba(201,163,95,0.25);
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px rgba(201,163,95,0.35);
+  }
+  .btn-primary:active{ transform:translateY(0); }
+
+  .btn-dodge{
+    background:transparent;
+    color:var(--cream-dim);
+    border:1px solid var(--gold-dim);
+  }
+
+  .roaming{
+    position:absolute !important;
+    z-index:999;
+    margin:0 !important;
+  }
+
+  .note{
+    margin-top:22px;
+    font-size:clamp(11px,2vw,12.5px);
+    color:var(--cream-dim);
+    opacity:0.6;
+    font-style:italic;
+    font-family:'Cormorant Garamond', serif;
+  }
+
+  .heart-burst{
+    font-size:clamp(20px,4vw,26px);
+    letter-spacing:10px;
+    color:var(--gold-bright);
+    margin-bottom:6px;
+  }
+
+  #fireworkCanvas{ position:absolute; inset:0; z-index:11; pointer-events:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width:375px){
+    .card{ padding:26px 18px; }
+    .btn-row{ gap:12px; }
+    button{ padding:12px 22px; font-size:13px; }
+    .progress{ top:12px; }
+    .date-grid{ grid-template-columns:1fr; gap:10px; }
+  }
+  @media (min-width:376px) and (max-width:480px){
+    .card{ padding:28px 22px; }
+    .date-grid{ grid-template-columns:1fr; gap:12px; }
+  }
+  @media (min-width:601px) and (max-width:900px){
+    .card{ max-width:560px; padding:40px 38px; }
+  }
+  @media (min-width:901px){
+    .card{ max-width:600px; padding:50px 46px; }
+  }
+  @media (max-height:480px){
+    .card{ padding:18px 24px; }
+    .ornament{ width:24px; height:24px; margin-bottom:8px; }
+    h1{ font-size:20px; margin:4px 0; }
+    p.sub{ margin:6px 0 16px; font-size:12.5px; }
+    .btn-row{ min-height:44px; }
+    button{ padding:10px 22px; font-size:12.5px; }
+    .date-grid{ margin:4px 0 16px; }
+  }
+
+  /* ================= Splash Screen ================= */
+  .splash-screen{
+    position:absolute;
+    inset:0;
+    z-index:300;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(201,163,95,0.14), transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(207,148,164,0.12), transparent 55%),
+      linear-gradient(180deg, #1a1428 0%, #120e1c 100%);
+    overflow:hidden;
+    transition:opacity 0.7s ease, visibility 0.7s ease;
+  }
+  .splash-screen.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+
+  .balloon-field{ position:absolute; inset:0; overflow:hidden; }
+  .balloon{
+    position:absolute;
+    bottom:-70px;
+    width:44px;
+    height:56px;
+    border-radius:50% 50% 46% 46%;
+    animation:floatUp linear infinite;
+    box-shadow:inset -6px -6px 10px rgba(0,0,0,0.18), inset 4px 4px 8px rgba(255,255,255,0.12);
+  }
+  .balloon::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    top:100%;
+    width:1px;
+    height:42px;
+    background:rgba(244,236,221,0.3);
+    transform:translateX(-50%);
+  }
+  .balloon.b1{ left:10%; width:44px; height:56px; background:linear-gradient(160deg,var(--gold-bright),var(--gold)); animation-duration:12s; animation-delay:0s; }
+  .balloon.b2{ left:26%; width:36px; height:48px; background:linear-gradient(160deg,var(--rose),#b97b8d); animation-duration:14.5s; animation-delay:2.2s; }
+  .balloon.b3{ left:48%; width:40px; height:52px; background:linear-gradient(160deg,var(--cream),#d8c9a9); animation-duration:10.5s; animation-delay:1s; }
+  .balloon.b4{ left:66%; width:32px; height:42px; background:linear-gradient(160deg,var(--gold),var(--gold-bright)); animation-duration:13.5s; animation-delay:3.6s; }
+  .balloon.b5{ left:82%; width:38px; height:50px; background:linear-gradient(160deg,var(--rose),#c9a35f); animation-duration:11.5s; animation-delay:1.6s; }
+  .balloon.b6{ left:92%; width:28px; height:36px; background:linear-gradient(160deg,var(--gold-bright),var(--rose)); animation-duration:15s; animation-delay:4.4s; }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(-4deg); opacity:0; }
+    10%{ opacity:0.92; }
+    50%{ transform:translateY(-55vh) translateX(16px) rotate(3deg); }
+    90%{ opacity:0.8; }
+    100%{ transform:translateY(-118vh) translateX(-12px) rotate(-3deg); opacity:0; }
+  }
+
+  .splash-content{ position:relative; z-index:2; padding:0 24px; }
+  .splash-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    line-height:1.05;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
+  }
+  .splash-title .word{
+    opacity:0;
+    font-size:clamp(40px,11vw,78px);
+    background:linear-gradient(135deg,var(--gold-bright),var(--gold) 55%,var(--rose));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(0 0 18px rgba(201,163,95,0.35));
+    animation:wordRise 0.9s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .splash-title .happy{ animation-delay:0.25s; }
+  .splash-title .birthday{ animation-delay:0.6s; }
+  @keyframes wordRise{
+    from{ opacity:0; transform:translateY(26px) scale(0.9); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .splash-name{
+    margin-top:16px;
+    font-family:'Petit Formal Script', cursive;
+    font-size:clamp(28px,6.5vw,42px);
+    color:var(--cream);
+    opacity:0;
+    animation:wordRise 0.9s cubic-bezier(.22,1,.36,1) 1.05s forwards;
+  }
+  .splash-name .sparkle{
+    color:var(--gold-bright);
+    font-family:'Inter',sans-serif;
+    display:inline-block;
+    animation:sparkleTwinkle 1.6s ease infinite;
+  }
+  @keyframes sparkleTwinkle{
+    0%,100%{ opacity:0.4; transform:scale(0.9); }
+    50%{ opacity:1; transform:scale(1.15); }
+  }
+
+  .splash-btn{
+    margin-top:34px;
+    opacity:0;
+    animation:wordRise 0.9s cubic-bezier(.22,1,.36,1) 1.45s forwards, btnPulse 2.2s ease 2.4s infinite;
+  }
+  @keyframes btnPulse{
+    0%,100%{ box-shadow:0 10px 24px rgba(201,163,95,0.25); }
+    50%{ box-shadow:0 10px 30px rgba(201,163,95,0.5); }
+  }
+
+  @media (max-height:480px){
+    .splash-title .word{ font-size:clamp(30px,8vw,52px); }
+    .splash-name{ font-size:clamp(22px,5vw,30px); margin-top:10px; }
+    .splash-btn{ margin-top:20px; }
+  }
+
+  ::selection{ background:var(--gold); color:#171123; }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <div class="bg-gradient"></div>
+  <div class="grid-layer"></div>
+  <canvas id="particleCanvas"></canvas>
+  <div id="petalLayer"></div>
+  <canvas id="fireworkCanvas"></canvas>
+
+  <!-- Animated intro splash -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="balloon-field">
+      <div class="balloon b1"></div>
+      <div class="balloon b2"></div>
+      <div class="balloon b3"></div>
+      <div class="balloon b4"></div>
+      <div class="balloon b5"></div>
+      <div class="balloon b6"></div>
+    </div>
+    <div class="splash-content">
+      <div class="splash-title">
+        <span class="word happy">Happy</span>
+        <span class="word birthday">Birthday</span>
+      </div>
+      <div class="splash-name">Keerthy <span class="sparkle">✦</span></div>
+      <button class="btn-primary splash-btn" id="splashEnterBtn">Open your surprise</button>
+    </div>
+  </div>
+
+  <div class="progress" id="progressDots">
+    <span class="active" data-i="0"></span>
+    <span data-i="1"></span>
+    <span data-i="2"></span>
+    <span data-i="3"></span>
+    <span data-i="4"></span>
+    <span data-i="5"></span>
+    <span data-i="6"></span>
+    <span data-i="7"></span>
+  </div>
+
+  <!-- Screen 0: Pure Birthday Wish -->
+  <div class="screen active" id="screen0">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="10.5" stroke-width="1"/>
+          <line x1="17" y1="1" x2="17" y2="6" stroke-width="1"/>
+          <line x1="17" y1="28" x2="17" y2="33" stroke-width="1"/>
+          <line x1="1" y1="17" x2="6" y2="17" stroke-width="1"/>
+          <line x1="28" y1="17" x2="33" y2="17" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">A birthday note</span>
+      <h1>Happy Birthday, <span class="highlight">Keerthy</span></h1>
+      <div class="divider"></div>
+      <p class="sub">My September-born queen.<br>
+      Wishing you a day filled with laughter, love, and every little thing that makes you smile.<br>
+      May this new year of your life be your most beautiful one yet, Keerthiba.</p>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="goTo(1)">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 1: Question 1 -->
+  <div class="screen" id="screen1">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="10.5" stroke-width="1"/>
+          <line x1="17" y1="1" x2="17" y2="6" stroke-width="1"/>
+          <line x1="17" y1="28" x2="17" y2="33" stroke-width="1"/>
+          <line x1="1" y1="17" x2="6" y2="17" stroke-width="1"/>
+          <line x1="28" y1="17" x2="33" y2="17" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">Question 1 of 6</span>
+      <h1>Do you know how <span class="highlight">special</span> you've always been to me?</h1>
+      <div class="divider"></div>
+      <p class="sub">Even on my hardest days, just thinking of you made things feel a little lighter.<br>
+      I don't think you've ever really known that.</p>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="goTo(2)">I didn't know</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 2: Question 2 -->
+  <div class="screen" id="screen2">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="10.5" stroke-width="1"/>
+          <line x1="17" y1="1" x2="17" y2="6" stroke-width="1"/>
+          <line x1="17" y1="28" x2="17" y2="33" stroke-width="1"/>
+          <line x1="1" y1="17" x2="6" y2="17" stroke-width="1"/>
+          <line x1="28" y1="17" x2="33" y2="17" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">Question 2 of 6</span>
+      <h1>Have I ever made you <span class="highlight">smile</span> without you noticing it was me?</h1>
+      <div class="divider"></div>
+      <p class="sub">Every time I made you laugh, or checked if you'd eaten, or just said something silly to cheer you up —<br>
+      that was me quietly trying to make your day a little better.</p>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="goTo(3)">Maybe you did</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 3: Question 3 -->
+  <div class="screen" id="screen3">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="10.5" stroke-width="1"/>
+          <line x1="17" y1="1" x2="17" y2="6" stroke-width="1"/>
+          <line x1="17" y1="28" x2="17" y2="33" stroke-width="1"/>
+          <line x1="1" y1="17" x2="6" y2="17" stroke-width="1"/>
+          <line x1="28" y1="17" x2="33" y2="17" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">Question 3 of 6</span>
+      <h1>Do you believe some feelings are worth <span class="highlight">waiting</span> for?</h1>
+      <div class="divider"></div>
+      <p class="sub">I've held onto this feeling quietly since long before this September came around.<br>
+      But some things are worth the risk of finally being honest about.</p>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="goTo(4)">Tell me everything</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 4: Question 4 - The Proposal -->
+  <div class="screen" id="screen4">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="10.5" stroke-width="1"/>
+          <line x1="17" y1="1" x2="17" y2="6" stroke-width="1"/>
+          <line x1="17" y1="28" x2="17" y2="33" stroke-width="1"/>
+          <line x1="1" y1="17" x2="6" y2="17" stroke-width="1"/>
+          <line x1="28" y1="17" x2="33" y2="17" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">Question 4 of 6</span>
+      <h1>Keerthiba, will you accept my <span class="highlight">love</span>?</h1>
+      <div class="divider"></div>
+      <p class="sub">I've kept this feeling safe in my heart for so long.<br>
+      So here it is, as honestly as I can say it —</p>
+      <div class="btn-row" id="row4">
+        <button class="btn-primary" onclick="goTo(5)">Accept</button>
+        <button class="btn-dodge" id="rejectBtn">Reject</button>
+      </div>
+      <p class="note">psst — that other button is a little shy</p>
+    </div>
+  </div>
+
+  <!-- Screen 5: Question 5 - Our First Dates -->
+  <div class="screen" id="screen5">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="10.5" stroke-width="1"/>
+          <line x1="17" y1="1" x2="17" y2="6" stroke-width="1"/>
+          <line x1="17" y1="28" x2="17" y2="33" stroke-width="1"/>
+          <line x1="1" y1="17" x2="6" y2="17" stroke-width="1"/>
+          <line x1="28" y1="17" x2="33" y2="17" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">Question 5 of 6</span>
+      <h1>Let's plan our <span class="highlight">first dates</span> together?</h1>
+      <div class="divider"></div>
+      <p class="sub">I already have a few ideas in mind for us —</p>
+      <div class="date-grid">
+        <div class="date-tile">
+          <span class="icon">🏸</span>
+          <h3>Turf Date</h3>
+          <p>Let's grab a racket and play shuttle together at the turf</p>
+        </div>
+        <div class="date-tile">
+          <span class="icon">🛕</span>
+          <h3>Temple Date</h3>
+          <p>Let's visit the temple together and seek blessings for us</p>
+        </div>
+      </div>
+      <div class="btn-row" id="row5">
+        <button class="btn-primary" onclick="goTo(6)">Yes, let's go</button>
+        <button class="btn-dodge" id="noBtn">No</button>
+      </div>
+      <p class="note">that "No" button is even shier than the last one</p>
+    </div>
+  </div>
+
+  <!-- Screen 6: Question 6 - The Marriage Proposal -->
+  <div class="screen" id="screen6">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="17" r="6" stroke-width="1"/>
+          <circle cx="22" cy="17" r="6" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">Question 6 of 6</span>
+      <h1>Keerthiba, <span class="script">enna kalyanam</span> pannikiruya?</h1>
+      <div class="divider"></div>
+      <p class="sub">Naan ketkura oru kelvi ithu thaan — my love, my best friend, my forever.<br>
+      I don't just want the turf dates and the temple visits.<br>
+      I want a whole lifetime of them, with you, by my side, as my wife.<br><br>
+      So Keerthiba, <span class="highlight">will you marry me</span>?</p>
+      <div class="btn-row" id="row6">
+        <button class="btn-primary" onclick="goTo(7)">Yes, I'll marry you</button>
+        <button class="btn-dodge" id="marryNoBtn">No</button>
+      </div>
+      <p class="note">this button is the shiest one yet — it knows the answer already</p>
+    </div>
+  </div>
+
+  <!-- Screen 7: Final Celebration -->
+  <div class="screen final" id="screen7">
+    <div class="card">
+      <div class="heart-burst">✦ ✦ ✦</div>
+      <h1>You just made my <span class="highlight">whole life</span></h1>
+      <div class="divider"></div>
+      <p class="sub">Happy Birthday, my <span class="script">Keerthiba</span>.<br>
+      Thank you for saying yes to my love, to our dates, and now — to forever.<br><br>
+      Here's to turf dates, temple visits, and a whole lifetime of memories as husband and wife, my September queen. I love you.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ================= Splash screen dismiss ================= */
+const splashScreen = document.getElementById('splashScreen');
+const splashEnterBtn = document.getElementById('splashEnterBtn');
+splashEnterBtn.addEventListener('click', () => {
+  splashScreen.classList.add('hide');
+  setTimeout(() => { splashScreen.style.display = 'none'; }, 750);
+});
+
+/* ================= Screen navigation ================= */
+const screens = document.querySelectorAll('.screen');
+const dots = document.querySelectorAll('.progress span');
+function goTo(index){
+  screens.forEach(s => s.classList.remove('active'));
+  screens[index].classList.add('active');
+  dots.forEach((d,i)=> d.classList.toggle('active', i===index));
+  if(index===7) launchFireworks();
+}
+
+/* ================= Falling petals (subtle, low density) ================= */
+const petalLayer = document.getElementById('petalLayer');
+function spawnPetal(){
+  const p = document.createElement('div');
+  p.className = 'petal';
+  const size = 6 + Math.random()*6;
+  p.style.left = Math.random()*100 + 'vw';
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.borderRadius = '0 60% 0 60%';
+  p.style.background = Math.random() > 0.5
+    ? 'linear-gradient(135deg,#e3c586,#c9a35f)'
+    : 'linear-gradient(135deg,#d9a7b6,#cf94a4)';
+  const duration = 9 + Math.random()*8;
+  p.style.animationDuration = duration + 's';
+  petalLayer.appendChild(p);
+  setTimeout(()=> p.remove(), duration*1000 + 200);
+}
+setInterval(spawnPetal, 900);
+
+/* ================= Particle sparkle canvas ================= */
+const pCanvas = document.getElementById('particleCanvas');
+const pCtx = pCanvas.getContext('2d');
+let particles = [];
+function resizeCanvas(){
+  pCanvas.width = window.innerWidth;
+  pCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function initParticles(){
+  particles = [];
+  const count = Math.floor((window.innerWidth * window.innerHeight) / 22000);
+  for(let i=0;i<count;i++){
+    particles.push({
+      x: Math.random()*pCanvas.width,
+      y: Math.random()*pCanvas.height,
+      r: Math.random()*1.4 + 0.3,
+      speed: Math.random()*0.2 + 0.04,
+      phase: Math.random()*Math.PI*2
+    });
+  }
+}
+initParticles();
+window.addEventListener('resize', initParticles);
+
+let t = 0;
+function drawParticles(){
+  pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
+  t += 0.015;
+  particles.forEach(p=>{
+    const twinkle = 0.3 + 0.5*Math.abs(Math.sin(t + p.phase));
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    pCtx.fillStyle = `rgba(227,197,134,${twinkle*0.6})`;
+    pCtx.fill();
+    p.y -= p.speed;
+    if(p.y < -5){ p.y = pCanvas.height + 5; p.x = Math.random()*pCanvas.width; }
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* ================= Dodging button logic — strictly clamped inside the visible screen ================= */
+function makeDodger(btn){
+  let isRoaming = false;
+  const appEl = document.getElementById('app');
+  const originalParent = btn.parentElement;
+  const originalNextSibling = btn.nextSibling;
+
+  function randomPosition(){
+    const w = btn.offsetWidth || 130;
+    const h = btn.offsetHeight || 52;
+    const vw = appEl.clientWidth;
+    const vh = appEl.clientHeight;
+
+    const safeTop = 76;
+    const safeBottom = 50;
+    const safeSide = 20;
+
+    const minX = safeSide;
+    const maxX = Math.max(vw - w - safeSide, minX + 10);
+    const minY = safeTop;
+    const maxY = Math.max(vh - h - safeBottom, minY + 10);
+
+    const x = minX + Math.random() * (maxX - minX);
+    const y = minY + Math.random() * (maxY - minY);
+    return { x, y };
+  }
+
+  function runAway(){
+    const screenEl = originalParent.closest('.screen');
+    if(!screenEl.classList.contains('active')) return;
+
+    if(!isRoaming){
+      isRoaming = true;
+      appEl.appendChild(btn);
+      btn.classList.add('roaming');
+    }
+    const {x,y} = randomPosition();
+    btn.style.left = x + 'px';
+    btn.style.top = y + 'px';
+  }
+
+  function resetToOriginalSpot(){
+    if(isRoaming){
+      isRoaming = false;
+      btn.classList.remove('roaming');
+      btn.style.left = '';
+      btn.style.top = '';
+      if(originalNextSibling){
+        originalParent.insertBefore(btn, originalNextSibling);
+      } else {
+        originalParent.appendChild(btn);
+      }
+    }
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    const screenEl = originalParent.closest('.screen');
+    if(!screenEl.classList.contains('active')) return;
+    const rect = btn.getBoundingClientRect();
+    const btnCenterX = rect.left + rect.width/2;
+    const btnCenterY = rect.top + rect.height/2;
+    const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+    if(dist < 110){ runAway(); }
+  });
+
+  btn.addEventListener('touchstart', (e) => { e.preventDefault(); runAway(); }, {passive:false});
+  btn.addEventListener('mouseenter', runAway);
+  btn.addEventListener('click', (e) => { e.preventDefault(); runAway(); });
+
+  const screenEl = originalParent.closest('.screen');
+  const observer = new MutationObserver(()=>{
+    if(!screenEl.classList.contains('active')){
+      resetToOriginalSpot();
+    }
+  });
+  observer.observe(screenEl, { attributes:true, attributeFilter:['class'] });
+
+  window.addEventListener('resize', ()=>{
+    if(isRoaming) runAway();
+  });
+}
+makeDodger(document.getElementById('rejectBtn'));
+makeDodger(document.getElementById('noBtn'));
+makeDodger(document.getElementById('marryNoBtn'));
+
+/* ================= Fireworks on final screen (gold palette, restrained) ================= */
+const fCanvas = document.getElementById('fireworkCanvas');
+const fCtx = fCanvas.getContext('2d');
+fCanvas.width = window.innerWidth;
+fCanvas.height = window.innerHeight;
+window.addEventListener('resize', ()=>{
+  fCanvas.width = window.innerWidth;
+  fCanvas.height = window.innerHeight;
+});
+
+let fireworkParticles = [];
+function createFirework(x,y){
+  const colors = ['#e3c586','#c9a35f','#cf94a4','#f4ecdd'];
+  for(let i=0;i<32;i++){
+    const angle = (Math.PI*2/32)*i;
+    const speed = Math.random()*2.6 + 1.6;
+    fireworkParticles.push({
+      x, y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed,
+      alpha: 1,
+      color: colors[Math.floor(Math.random()*colors.length)]
+    });
+  }
+}
+
+function launchFireworks(){
+  let bursts = 0;
+  const interval = setInterval(()=>{
+    createFirework(Math.random()*fCanvas.width, Math.random()*fCanvas.height*0.6 + 40);
+    bursts++;
+    if(bursts >= 5) clearInterval(interval);
+  }, 550);
+}
+
+function animateFireworks(){
+  fCtx.clearRect(0,0,fCanvas.width,fCanvas.height);
+  fireworkParticles.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.03;
+    p.alpha -= 0.011;
+    fCtx.globalAlpha = Math.max(p.alpha,0);
+    fCtx.beginPath();
+    fCtx.arc(p.x, p.y, 1.8, 0, Math.PI*2);
+    fCtx.fillStyle = p.color;
+    fCtx.fill();
+  });
+  fCtx.globalAlpha = 1;
+  fireworkParticles = fireworkParticles.filter(p => p.alpha > 0);
+  requestAnimationFrame(animateFireworks);
+}
+animateFireworks();
+</script>
+
+</body>
+</html>
