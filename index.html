@@ -374,9 +374,9 @@
     line-height:1.55;
   }
 
-  /* ---------- Memories gallery ---------- */
+  /* ---------- Memories gallery: heart-shaped photo mosaic ---------- */
   .memory-scroll{
-    max-height:min(58vh, 480px);
+    max-height:min(62vh, 560px);
     overflow-y:auto;
     overflow-x:hidden;
     padding:6px 4px 10px;
@@ -387,60 +387,125 @@
   .memory-scroll::-webkit-scrollbar{ width:5px; }
   .memory-scroll::-webkit-scrollbar-thumb{ background:var(--gold-dim); border-radius:4px; }
 
-  .memory-grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:clamp(14px,2.6vw,20px);
-    padding:10px 4px;
-  }
-  .polaroid{
+  .heart-mask-wrap{
     position:relative;
-    background:var(--cream);
-    padding:8px 8px 22px;
-    border-radius:3px;
-    box-shadow:0 14px 26px rgba(0,0,0,0.4);
+    width:min(86vw, 460px);
+    aspect-ratio: 32 / 29;
+    margin:6px auto 18px;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'><path d='M16 29 C16 29 0 17.5 0 9 C0 4 4 0 8.7 0 C12.2 0 15.1 2.6 16 6.2 C16.9 2.6 19.8 0 23.3 0 C28 0 32 4 32 9 C32 17.5 16 29 16 29 Z'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'><path d='M16 29 C16 29 0 17.5 0 9 C0 4 4 0 8.7 0 C12.2 0 15.1 2.6 16 6.2 C16.9 2.6 19.8 0 23.3 0 C28 0 32 4 32 9 C32 17.5 16 29 16 29 Z'/></svg>");
+    -webkit-mask-size:contain;
+    mask-size:contain;
+    -webkit-mask-repeat:no-repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-position:center;
+    mask-position:center;
+    filter:drop-shadow(0 18px 40px rgba(0,0,0,0.5));
+  }
+  .heart-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-template-rows:repeat(4, 1fr);
+    width:100%;
+    height:100%;
+    gap:2px;
+    background:var(--ink);
+  }
+  .heart-tile{
+    position:relative;
+    margin:0;
+    overflow:hidden;
+    background:var(--surface-2);
     opacity:0;
-    transform:translateY(16px) rotate(var(--tilt,0deg));
-    animation:polaroidIn 0.7s ease forwards;
+    animation:tileIn 0.7s ease forwards;
     animation-delay:var(--d, 0s);
-    transition:transform 0.3s ease, box-shadow 0.3s ease;
-    cursor:default;
   }
-  .polaroid:nth-child(1){ --tilt:-3deg; --d:0.05s; }
-  .polaroid:nth-child(2){ --tilt:2deg;  --d:0.15s; }
-  .polaroid:nth-child(3){ --tilt:-2deg; --d:0.25s; }
-  .polaroid:nth-child(4){ --tilt:3deg;  --d:0.35s; }
-  .polaroid:nth-child(5){ --tilt:-2.5deg; --d:0.45s; }
-  .polaroid:nth-child(6){ --tilt:2.5deg; --d:0.55s; }
-  .polaroid:nth-child(7){ --tilt:-3deg; --d:0.65s; }
-  .polaroid:nth-child(8){ --tilt:2deg;  --d:0.75s; }
-  @keyframes polaroidIn{
-    from{ opacity:0; transform:translateY(16px) rotate(var(--tilt,0deg)) scale(0.92); }
-    to{ opacity:1; transform:translateY(0) rotate(var(--tilt,0deg)) scale(1); }
+  @keyframes tileIn{
+    from{ opacity:0; transform:scale(1.15); }
+    to{ opacity:1; transform:scale(1); }
   }
-  .polaroid:hover{
-    transform:translateY(-6px) rotate(0deg) scale(1.04);
-    box-shadow:0 22px 40px rgba(201,163,95,0.28);
-    z-index:5;
-  }
-  .polaroid img{
+  .heart-tile:nth-child(1){ --d:0.05s; }
+  .heart-tile:nth-child(2){ --d:0.12s; }
+  .heart-tile:nth-child(3){ --d:0.19s; }
+  .heart-tile:nth-child(4){ --d:0.26s; }
+  .heart-tile:nth-child(5){ --d:0.33s; }
+  .heart-tile:nth-child(6){ --d:0.40s; }
+  .heart-tile:nth-child(7){ --d:0.47s; }
+  .heart-tile:nth-child(8){ --d:0.54s; }
+  .heart-tile img{
     display:block;
     width:100%;
-    aspect-ratio:1/1;
+    height:100%;
     object-fit:cover;
-    border-radius:1px;
     filter:sepia(0.12) saturate(1.05);
+    transition:transform 0.4s ease, filter 0.4s ease;
   }
-  .polaroid figcaption{
-    margin:10px 2px 0;
+  .heart-tile:hover img{
+    transform:scale(1.12);
+    filter:sepia(0) saturate(1.15);
+  }
+  .heart-tile figcaption{
+    position:absolute;
+    inset:auto 0 0 0;
+    padding:10px 6px 8px;
+    background:linear-gradient(0deg, rgba(19,14,28,0.88), transparent);
     font-family:'Petit Formal Script', cursive;
-    font-size:14px;
-    color:#3a2e23;
+    font-size:12.5px;
+    color:var(--cream);
     text-align:center;
-    line-height:1.2;
+    line-height:1.15;
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+  .heart-tile:hover figcaption{
+    opacity:1;
+    transform:translateY(0);
   }
   .memory-tagline{
     margin-top:-6px;
+  }
+
+  /* ---------- Synced lyric ticker ---------- */
+  .lyrics-overlay{
+    position:absolute;
+    left:50%;
+    bottom:22px;
+    transform:translateX(-50%);
+    z-index:55;
+    width:min(90vw, 520px);
+    text-align:center;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 0.5s ease;
+  }
+  .lyrics-overlay.visible{ opacity:1; }
+  .lyrics-overlay .lyric-prev,
+  .lyrics-overlay .lyric-next{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:clamp(11px,1.8vw,13px);
+    color:var(--cream-dim);
+    opacity:0.4;
+    margin:0;
+    line-height:1.3;
+  }
+  .lyrics-overlay .lyric-current{
+    font-family:'Petit Formal Script', cursive;
+    font-size:clamp(17px,3.4vw,23px);
+    color:var(--gold-bright);
+    margin:4px 0;
+    line-height:1.3;
+    text-shadow:0 0 16px rgba(201,163,95,0.35);
+    transition:opacity 0.35s ease, transform 0.35s ease;
+  }
+  .lyrics-overlay .lyric-current.swap{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  @media (max-height:480px){
+    .lyrics-overlay{ bottom:10px; }
+    .lyrics-overlay .lyric-prev, .lyrics-overlay .lyric-next{ display:none; }
   }
 
   .btn-row{
@@ -524,12 +589,11 @@
     .thread{ width:150px; }
     .date-grid{ grid-template-columns:1fr; gap:10px; }
     .music-toggle{ top:14px; right:14px; width:36px; height:36px; }
-    .memory-grid{ grid-template-columns:repeat(2, 1fr); gap:12px; }
+    .heart-mask-wrap{ width:82vw; }
   }
   @media (min-width:376px) and (max-width:480px){
     .card{ padding:28px 22px; }
     .date-grid{ grid-template-columns:1fr; gap:12px; }
-    .memory-grid{ grid-template-columns:repeat(2, 1fr); }
   }
   @media (min-width:601px) and (max-width:900px){
     .card{ max-width:560px; padding:40px 38px; }
@@ -748,6 +812,13 @@
     <source src="./public/Sidu Sidu (3).mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Synced lyric ticker: shows the current line while the song plays -->
+  <div class="lyrics-overlay" id="lyricsOverlay">
+    <p class="lyric-prev" id="lyricPrev"></p>
+    <p class="lyric-current" id="lyricCurrent"></p>
+    <p class="lyric-next" id="lyricNext"></p>
+  </div>
+
   <div class="progress-wrap">
     <div class="thread"><div class="thread-fill" id="threadFill"></div></div>
     <div class="progress" id="progressDots">
@@ -953,39 +1024,57 @@
       <div class="divider"></div>
       <p class="sub memory-tagline">Every one of these is a small proof that us was always worth it.</p>
       <div class="memory-scroll">
-        <div class="memory-grid">
-          <figure class="polaroid">
-            <img src="./public/1776440756080.png" alt="A memory of us" loading="lazy">
-            <figcaption>where it started</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1776440792262.png" alt="A memory of us" loading="lazy">
-            <figcaption>us, being us</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1776993965997.png" alt="A memory of us" loading="lazy">
-            <figcaption>that day we laughed too much</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1776994383126.png" alt="A memory of us" loading="lazy">
-            <figcaption>one of my favorites</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1777201714374.png" alt="A memory of us" loading="lazy">
-            <figcaption>just you and me</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1779183389082.png" alt="A memory of us" loading="lazy">
-            <figcaption>a memory I replay often</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1781450854050.png" alt="A memory of us" loading="lazy">
-            <figcaption>still makes me smile</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1781451732659.png" alt="A memory of us" loading="lazy">
-            <figcaption>the beginning of everything</figcaption>
-          </figure>
+        <div class="heart-mask-wrap">
+          <div class="heart-grid">
+            <figure class="heart-tile">
+              <img src="./public/1776440756080.png" alt="A memory of us" loading="lazy">
+              <figcaption>where it started</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./public/1776440792262.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./public/1776993965997.png" alt="A memory of us" loading="lazy">
+              <figcaption>that day we laughed too much</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./public/1776440792262.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./public/1776994383126.png" alt="A memory of us" loading="lazy">
+              <figcaption>one of my favorites</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./public/1777201714374.png" alt="A memory of us" loading="lazy">
+              <figcaption>just you and me</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./public/1776440792262.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./public/1779183389082.png" alt="A memory of us" loading="lazy">
+              <figcaption>a memory I replay often</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./public/1776440792262.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./public/1781450854050.png" alt="A memory of us" loading="lazy">
+              <figcaption>still makes me smile</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./public/1781451732659.png" alt="A memory of us" loading="lazy">
+              <figcaption>the beginning of everything</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./public/1776440792262.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
       <div class="btn-row">
@@ -1070,6 +1159,65 @@ musicToggle.addEventListener('click', () => {
   iconStatic.style.display = musicPlaying ? 'none' : 'block';
   iconPlaying.style.display = musicPlaying ? 'block' : 'none';
 });
+
+/* ================= Synced lyric ticker =================
+   Fill in your own transcription of each line below, and adjust
+   "time" (seconds from the start of the track) to match where
+   that line actually falls in the mp3. Add or remove rows freely -
+   the display code just walks this array. I've left the song's
+   own copyrighted words out; drop your own line-by-line typing in
+   where it says "— add line —". */
+const lyricsData = [
+  { time: 0,   text: "— add line 1 here —" },
+  { time: 5,   text: "— add line 2 here —" },
+  { time: 10,  text: "— add line 3 here —" },
+  { time: 15,  text: "— add line 4 here —" },
+  { time: 20,  text: "— add line 5 here —" },
+  { time: 25,  text: "— add line 6 here —" },
+  { time: 30,  text: "— add line 7 here —" },
+  { time: 35,  text: "— add line 8 here —" },
+  { time: 40,  text: "— add line 9 here —" },
+  { time: 45,  text: "— add line 10 here —" }
+  // keep adding { time: <seconds>, text: "..." } rows for the rest of the song
+];
+
+const lyricsOverlay = document.getElementById('lyricsOverlay');
+const lyricPrevEl = document.getElementById('lyricPrev');
+const lyricCurrentEl = document.getElementById('lyricCurrent');
+const lyricNextEl = document.getElementById('lyricNext');
+let activeLyricIndex = -1;
+
+function findLyricIndex(t){
+  let idx = -1;
+  for(let i=0;i<lyricsData.length;i++){
+    if(lyricsData[i].time <= t) idx = i;
+    else break;
+  }
+  return idx;
+}
+
+function renderLyric(idx){
+  lyricPrevEl.textContent = idx > 0 ? lyricsData[idx-1].text : '';
+  lyricNextEl.textContent = idx >= 0 && idx < lyricsData.length-1 ? lyricsData[idx+1].text : '';
+  lyricCurrentEl.classList.add('swap');
+  setTimeout(()=>{
+    lyricCurrentEl.textContent = idx >= 0 ? lyricsData[idx].text : '';
+    lyricCurrentEl.classList.remove('swap');
+  }, 180);
+}
+
+bgMusic.addEventListener('timeupdate', () => {
+  if(!musicPlaying){ lyricsOverlay.classList.remove('visible'); return; }
+  lyricsOverlay.classList.add('visible');
+  const idx = findLyricIndex(bgMusic.currentTime);
+  if(idx !== activeLyricIndex){
+    activeLyricIndex = idx;
+    renderLyric(idx);
+  }
+});
+bgMusic.addEventListener('pause', () => lyricsOverlay.classList.remove('visible'));
+bgMusic.addEventListener('play', () => { if(lyricsData.length) lyricsOverlay.classList.add('visible'); });
+
 /* ================= Screen navigation ================= */
 const screens = document.querySelectorAll('.screen');
 const dots = document.querySelectorAll('.progress span');
