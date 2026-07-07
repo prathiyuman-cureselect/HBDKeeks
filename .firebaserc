@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "make-over-by-keerthi"
+  },
+  "targets": {
+    "make-over-by-keerthi": {
+      "hosting": {
+        "hbdkeeks": [
+          "hbdkeeks"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
