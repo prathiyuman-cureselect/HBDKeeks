@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <link rel="icon" type="image/png" href="/kee.png">
 <title>Happy Birthday, Keeks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -803,6 +802,20 @@
 
   ::selection{ background:var(--gold); color:#171123; }
 </style>
+<style>
+  /* Final heart animation styles */
+  .final-heart-wrap{ display:flex; align-items:center; justify-content:center; margin-top:18px; }
+  .final-heart{ width:160px; height:160px; display:block; }
+  .final-heart .heart-shape{ fill: url(#heartGradient); stroke: rgba(255,255,255,0.12); stroke-width:1.6; transform-origin:50% 50%; }
+  .final-heart .heart-outline{ fill:none; stroke:var(--gold-bright); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray: 400; stroke-dashoffset:400; opacity:0.95; }
+  .final-heart.active .heart-shape{ animation:beat 1s ease-in-out infinite 0s; }
+  .final-heart.active .heart-outline{ animation:draw 0.9s ease forwards 0.08s; }
+  @keyframes beat{ 0%{ transform:scale(0.92); filter: drop-shadow(0 6px 18px rgba(201,163,95,0.12)); } 40%{ transform:scale(1.06); filter: drop-shadow(0 18px 40px rgba(201,163,95,0.28)); } 100%{ transform:scale(0.98); } }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  .final-heart.glow{ animation:glowPulse 2.2s ease-in-out infinite; }
+  @keyframes glowPulse{ 0%{ filter:drop-shadow(0 0 6px rgba(201,163,95,0.12)); } 50%{ filter:drop-shadow(0 0 26px rgba(236,203,141,0.22)); } 100%{ filter:drop-shadow(0 0 6px rgba(201,163,95,0.12)); } }
+  @media (max-width:767px){ .final-heart{ width:110px; height:110px; } }
+</style>
 </head>
 <body>
 
@@ -1169,11 +1182,26 @@ Indha chinna chinna dreams i dont know unakku yen enna pudikala but i swear you 
   <div class="screen final" id="screen8">
     <div class="card">
       <div class="heart-burst">✦ ✦ ✦</div>
+      <div class="final-heart-wrap" aria-hidden="true">
+        <svg class="final-heart" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="heartGradient" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#f6eee0" stop-opacity="1" />
+              <stop offset="60%" stop-color="#eccb8d" stop-opacity="1" />
+              <stop offset="100%" stop-color="#d9a0ae" stop-opacity="1" />
+            </linearGradient>
+          </defs>
+          <path class="heart-shape" d="M100 170 C40 130, 20 100, 50 70 C70 50, 100 60, 100 90 C100 60, 130 50, 150 70 C180 100, 160 130,100 170 Z"/>
+          <path class="heart-outline" d="M100 170 C40 130, 20 100, 50 70 C70 50, 100 60, 100 90 C100 60, 130 50, 150 70 C180 100, 160 130,100 170 Z"/>
+        </svg>
+      </div>
       <h1>You just made my <span class="highlight">whole life</span></h1>
       <div class="divider"></div>
       <p class="sub">Happy Birthday, <span class="script">Keeks</span>.<br>
-      Thank you for saying yes to my love, to our dates, and now — to forever.<br><br>
-      Here's to turf dates, temple visits, and a whole lifetime of memories as husband and wife, my September queen. I love you.</p>
+Thank you for saying yes to my love, to our dates, and now — to forever.<br><br>
+Your happiness is where I find my life, and I'll cherish it every single day.<br>
+No matter what life brings, I'll always stand by your side through every moment and every situation.<br>
+I'll keep loving you, choosing you, and dreaming of our forever, my September queen. ❤️</p>
     </div>
   </div>
 
@@ -1355,6 +1383,18 @@ function goTo(index){
   createFirework(cx + (Math.random()*160-80), cy*0.55 + (Math.random()*60-30), Math.random()>0.5 ? 'radial' : 'heart');
 
   if(index===8) launchFireworks();
+  if(index===8){
+    // trigger final heart animation
+    const fh = document.querySelector('.final-heart');
+    if(fh){ fh.classList.add('active','glow'); }
+    // small burst of hearts centered on card
+    setTimeout(()=>{
+      const card = document.querySelector('#screen8 .card');
+      if(card){ const rect = card.getBoundingClientRect(); spawnHeartBurst(rect.left + rect.width/2, rect.top + rect.height/2 - 20, 18); }
+    }, 260);
+  } else {
+    const fh = document.querySelector('.final-heart'); if(fh){ fh.classList.remove('active','glow'); }
+  }
 }
 
 /* ================= Falling petals ================= */
