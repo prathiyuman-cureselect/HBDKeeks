@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="icon" type="image/png" href="/kee.png">
 <title>Happy Birthday, Keeks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -143,6 +144,15 @@
     flex-direction:column;
     align-items:center;
     gap:8px;
+  }
+  .mobile-loading-label{
+    display:none;
+    font-family:'Petit Formal Script', cursive;
+    color:var(--gold-bright);
+    font-size:14px;
+    text-shadow:0 0 10px rgba(201,163,95,0.28);
+    margin-top:6px;
+    pointer-events:none;
   }
   .thread{
     position:relative;
@@ -374,9 +384,9 @@
     line-height:1.55;
   }
 
-  /* ---------- Memories gallery ---------- */
+  /* ---------- Memories gallery: heart-shaped photo mosaic ---------- */
   .memory-scroll{
-    max-height:min(58vh, 480px);
+    max-height:min(62vh, 560px);
     overflow-y:auto;
     overflow-x:hidden;
     padding:6px 4px 10px;
@@ -387,60 +397,132 @@
   .memory-scroll::-webkit-scrollbar{ width:5px; }
   .memory-scroll::-webkit-scrollbar-thumb{ background:var(--gold-dim); border-radius:4px; }
 
-  .memory-grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:clamp(14px,2.6vw,20px);
-    padding:10px 4px;
-  }
-  .polaroid{
+  .heart-mask-wrap{
     position:relative;
-    background:var(--cream);
-    padding:8px 8px 22px;
-    border-radius:3px;
-    box-shadow:0 14px 26px rgba(0,0,0,0.4);
+    width:min(86vw, 460px);
+    aspect-ratio: 32 / 29;
+    margin:6px auto 18px;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'><path d='M16 29 C16 29 0 17.5 0 9 C0 4 4 0 8.7 0 C12.2 0 15.1 2.6 16 6.2 C16.9 2.6 19.8 0 23.3 0 C28 0 32 4 32 9 C32 17.5 16 29 16 29 Z'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'><path d='M16 29 C16 29 0 17.5 0 9 C0 4 4 0 8.7 0 C12.2 0 15.1 2.6 16 6.2 C16.9 2.6 19.8 0 23.3 0 C28 0 32 4 32 9 C32 17.5 16 29 16 29 Z'/></svg>");
+    -webkit-mask-size:contain;
+    mask-size:contain;
+    -webkit-mask-repeat:no-repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-position:center;
+    mask-position:center;
+    filter:drop-shadow(0 18px 40px rgba(0,0,0,0.5));
+  }
+  .heart-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-template-rows:repeat(4, 1fr);
+    width:100%;
+    height:100%;
+    gap:2px;
+    background:var(--ink);
+  }
+  .heart-tile{
+    position:relative;
+    margin:0;
+    overflow:hidden;
+    background:var(--surface-2);
     opacity:0;
-    transform:translateY(16px) rotate(var(--tilt,0deg));
-    animation:polaroidIn 0.7s ease forwards;
+    animation:tileIn 0.7s ease forwards;
     animation-delay:var(--d, 0s);
-    transition:transform 0.3s ease, box-shadow 0.3s ease;
-    cursor:default;
   }
-  .polaroid:nth-child(1){ --tilt:-3deg; --d:0.05s; }
-  .polaroid:nth-child(2){ --tilt:2deg;  --d:0.15s; }
-  .polaroid:nth-child(3){ --tilt:-2deg; --d:0.25s; }
-  .polaroid:nth-child(4){ --tilt:3deg;  --d:0.35s; }
-  .polaroid:nth-child(5){ --tilt:-2.5deg; --d:0.45s; }
-  .polaroid:nth-child(6){ --tilt:2.5deg; --d:0.55s; }
-  .polaroid:nth-child(7){ --tilt:-3deg; --d:0.65s; }
-  .polaroid:nth-child(8){ --tilt:2deg;  --d:0.75s; }
-  @keyframes polaroidIn{
-    from{ opacity:0; transform:translateY(16px) rotate(var(--tilt,0deg)) scale(0.92); }
-    to{ opacity:1; transform:translateY(0) rotate(var(--tilt,0deg)) scale(1); }
+  @keyframes tileIn{
+    from{ opacity:0; transform:scale(1.15); }
+    to{ opacity:1; transform:scale(1); }
   }
-  .polaroid:hover{
-    transform:translateY(-6px) rotate(0deg) scale(1.04);
-    box-shadow:0 22px 40px rgba(201,163,95,0.28);
-    z-index:5;
-  }
-  .polaroid img{
+  .heart-tile:nth-child(1){ --d:0.05s; }
+  .heart-tile:nth-child(2){ --d:0.12s; }
+  .heart-tile:nth-child(3){ --d:0.19s; }
+  .heart-tile:nth-child(4){ --d:0.26s; }
+  .heart-tile:nth-child(5){ --d:0.33s; }
+  .heart-tile:nth-child(6){ --d:0.40s; }
+  .heart-tile:nth-child(7){ --d:0.47s; }
+  .heart-tile:nth-child(8){ --d:0.54s; }
+  .heart-tile img{
     display:block;
     width:100%;
-    aspect-ratio:1/1;
+    height:100%;
     object-fit:cover;
-    border-radius:1px;
     filter:sepia(0.12) saturate(1.05);
+    transition:transform 0.4s ease, filter 0.4s ease;
   }
-  .polaroid figcaption{
-    margin:10px 2px 0;
+  .heart-tile:hover img{
+    transform:scale(1.12);
+    filter:sepia(0) saturate(1.15);
+  }
+  .heart-tile figcaption{
+    position:absolute;
+    inset:auto 0 0 0;
+    padding:10px 6px 8px;
+    background:linear-gradient(0deg, rgba(19,14,28,0.88), transparent);
     font-family:'Petit Formal Script', cursive;
-    font-size:14px;
-    color:#3a2e23;
+    font-size:12.5px;
+    color:var(--cream);
     text-align:center;
-    line-height:1.2;
+    line-height:1.15;
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+  .heart-tile:hover figcaption{
+    opacity:1;
+    transform:translateY(0);
   }
   .memory-tagline{
     margin-top:-6px;
+  }
+
+  /* ---------- Synced lyric ticker ---------- */
+  .lyrics-overlay{
+    position:absolute;
+    left:50%;
+    bottom:22px;
+    transform:translateX(-50%);
+    z-index:55;
+    width:min(90vw, 520px);
+    text-align:center;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 0.5s ease;
+  }
+  .lyrics-overlay.visible{ opacity:1; }
+  .lyrics-overlay .lyric-prev,
+  .lyrics-overlay .lyric-next{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:clamp(10px,1.6vw,12px);
+    color:var(--cream-dim);
+    opacity:0.4;
+    margin:0;
+    line-height:1.3;
+  }
+  .lyrics-overlay .lyric-current{
+    font-family:'Petit Formal Script', cursive;
+    font-size:clamp(15px,3vw,20px);
+    color:var(--gold-bright);
+    margin:4px 0;
+    line-height:1.3;
+    text-shadow:0 0 16px rgba(201,163,95,0.35);
+    transition:opacity 0.35s ease, transform 0.35s ease;
+    min-height: 1.3em; /* prevent layout shift */
+    display: inline-block;
+  }
+  .lyrics-overlay .lyric-current.swap{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  @media (max-height:480px){
+    .lyrics-overlay{ bottom:10px; }
+    .lyrics-overlay .lyric-prev, .lyrics-overlay .lyric-next{ display:none; }
+  }
+
+  @media (max-width:767px){
+    .mobile-loading-label{ display:block; }
+    .lyrics-overlay{ bottom:40px; }
   }
 
   .btn-row{
@@ -524,12 +606,11 @@
     .thread{ width:150px; }
     .date-grid{ grid-template-columns:1fr; gap:10px; }
     .music-toggle{ top:14px; right:14px; width:36px; height:36px; }
-    .memory-grid{ grid-template-columns:repeat(2, 1fr); gap:12px; }
+    .heart-mask-wrap{ width:82vw; }
   }
   @media (min-width:376px) and (max-width:480px){
     .card{ padding:28px 22px; }
     .date-grid{ grid-template-columns:1fr; gap:12px; }
-    .memory-grid{ grid-template-columns:repeat(2, 1fr); }
   }
   @media (min-width:601px) and (max-width:900px){
     .card{ max-width:560px; padding:40px 38px; }
@@ -668,6 +749,8 @@
     opacity:0;
     animation:wordRise 0.9s cubic-bezier(.22,1,.36,1) 1.45s forwards, btnPulse 2.2s ease 2.4s infinite;
   }
+
+  
   @keyframes btnPulse{
     0%,100%{ box-shadow:0 10px 24px rgba(201,163,95,0.25); }
     50%{ box-shadow:0 10px 30px rgba(201,163,95,0.5); }
@@ -677,6 +760,45 @@
     .splash-title .word{ font-size:clamp(30px,8vw,52px); }
     .splash-name{ font-size:clamp(22px,5vw,30px); margin-top:10px; }
     .splash-btn{ margin-top:20px; }
+  }
+
+  .floating-bottom-left{
+    position:fixed;
+    bottom:clamp(14px,3vw,26px);
+    left:clamp(14px,3vw,26px);
+    width:clamp(120px,22vw,260px);
+    max-width:260px;
+    min-width:96px;
+    height:auto;
+    z-index:70;
+    pointer-events:none;
+    touch-action:none;
+    opacity:0.95;
+    filter:drop-shadow(0 16px 40px rgba(0,0,0,0.28));
+  }
+
+  @media (max-width:767px){
+    .floating-bottom-left{
+      width:clamp(92px,28vw,140px);
+      bottom:12px;
+      left:12px;
+    }
+  }
+
+  @media (min-width:768px) and (max-width:1023px){
+    .floating-bottom-left{
+      width:clamp(110px,18vw,180px);
+      bottom:18px;
+      left:18px;
+    }
+  }
+
+  @media (min-width:1024px){
+    .floating-bottom-left{
+      width:clamp(140px,14vw,260px);
+      bottom:24px;
+      left:24px;
+    }
   }
 
   ::selection{ background:var(--gold); color:#171123; }
@@ -748,6 +870,13 @@
     <source src="./Sidu Sidu (3).mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Synced lyric ticker: shows the current line while the song plays -->
+  <div class="lyrics-overlay" id="lyricsOverlay">
+    <p class="lyric-prev" id="lyricPrev"></p>
+    <p class="lyric-current" id="lyricCurrent"></p>
+    <p class="lyric-next" id="lyricNext"></p>
+  </div>
+
   <div class="progress-wrap">
     <div class="thread"><div class="thread-fill" id="threadFill"></div></div>
     <div class="progress" id="progressDots">
@@ -764,6 +893,7 @@
   </div>
 
   <!-- Screen 0: Pure Birthday Wish -->
+  <div class="mobile-loading-label">Happy Birthday Queen</div>
   <div class="screen active" id="screen0">
     <div class="card">
       <div class="ornament">
@@ -823,10 +953,9 @@
         </svg>
       </div>
       <span class="eyebrow">Together 2 of 6</span>
-      <h1>Have I ever made you <span class="highlight">smile</span> without you knowing it was me?</h1>
+      <h1>A Promise Beyond Words <span class="highlight">keeks</span> You Deserve a Beautiful Life</h1>
       <div class="divider"></div>
-      <p class="sub">Every silly joke to fix a bad mood, every "did you eat yet," every message sent just to check on you —<br>
-      none of it was random. It was me, quietly showing up for you in the only ways I knew how.</p>
+      <p class="sub">I know you've been through the darkest chapters of your life, and I can't erase the pain you've already lived with. But I promise you this—I will do everything I can to fill your life with happiness, peace, and the love you truly deserve. I want to be the reason you smile again, to stand by your side through every moment, and to give you the beautiful life you've always deserved. Believe in me, because I'll never stop trying to make you happy.</p>
       <div class="btn-row">
         <button class="btn-primary" onclick="goTo(3)">Maybe you did</button>
       </div>
@@ -848,8 +977,12 @@
       <span class="eyebrow">Together 3 of 6</span>
       <h1>Do you believe some feelings are worth <span class="highlight">waiting</span> for?</h1>
       <div class="divider"></div>
-      <p class="sub">I've carried this quietly for longer than this September — through every conversation I almost turned into a confession.<br>
-      Some things deserve patience. This is the one I finally stopped waiting on.</p>
+      <p class="sub">Namma rendu perum onna Thalapathy padam theater la paathu, whistle adichu, dance aadura maari daily imagine pannuven.
+Namma rendu perum onna kovil poi, kai pudichu prayer pannura mari.
+Night la ice cream sapdittu, long ride poganum nu aasai.
+Indha chinna chinna dreams i dont know unakku yen enna pudikala but i swear you are a diamond in my life. ❤️
+
+</p>
       <div class="btn-row">
         <button class="btn-primary" onclick="goTo(4)">Tell me everything</button>
       </div>
@@ -951,41 +1084,78 @@
       <span class="eyebrow">Before forever begins</span>
       <h1>A few <span class="highlight">moments</span> I never want to forget</h1>
       <div class="divider"></div>
-      <p class="sub memory-tagline">Every one of these is a small proof that us was always worth it.</p>
+      <p class="sub memory-tagline">Every one of these is was my memory.</p>
       <div class="memory-scroll">
-        <div class="memory-grid">
-          <figure class="polaroid">
-            <img src="1776440756080.png" alt="A memory of us" loading="lazy">
-            <figcaption>where it started</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1776440792262.png" alt="A memory of us" loading="lazy">
-            <figcaption>us, being us</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1776993965997.png" alt="A memory of us" loading="lazy">
-            <figcaption>that day we laughed too much</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1776994383126.png" alt="A memory of us" loading="lazy">
-            <figcaption>one of my favorites</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1777201714374.png" alt="A memory of us" loading="lazy">
-            <figcaption>just you and me</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1779183389082.png" alt="A memory of us" loading="lazy">
-            <figcaption>a memory I replay often</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1781450854050.png" alt="A memory of us" loading="lazy">
-            <figcaption>still makes me smile</figcaption>
-          </figure>
-          <figure class="polaroid">
-            <img src="1781451732659.png" alt="A memory of us" loading="lazy">
-            <figcaption>the beginning of everything</figcaption>
-          </figure>
+        <div class="heart-mask-wrap">
+          <div class="heart-grid">
+            <figure class="heart-tile">
+              <img src="./1776440756080.png" alt="A memory of us" loading="lazy">
+              <figcaption>where it started</figcaption>
+            </figure>
+
+             <figure class="heart-tile">
+              <img src="./1776440792262.png" alt="A memory of us" loading="lazy">
+              <figcaption>that day we laughed too much</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./Screenshot_20240117-225102.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+           
+             <figure class="heart-tile">
+              <img src="./Screenshot_20240422-160927.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./1776993965997.png" alt="A memory of us" loading="lazy">
+              <figcaption>one of my favorites</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./Screenshot_20260608-104309.Instagram.png" alt="A memory of us" loading="lazy">
+              <figcaption>just you and me</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./Screenshot_20240505-220954.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./Screenshot_20250611-182002~2.png" alt="A memory of us" loading="lazy">
+              <figcaption>a memory I replay often</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./Screenshot_20260705-123802.Instagram.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./1781450854050.png" alt="A memory of us" loading="lazy">
+              <figcaption>still makes me smile</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./1779183389082.png" alt="A memory of us" loading="lazy">
+              <figcaption>the beginning of everything</figcaption>
+            </figure>
+           
+             <figure class="heart-tile">
+              <img src="./Screenshot_20260705-123802.Instagram.png" alt="A memory of us" loading="lazy">
+              <figcaption>us, being us</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./Screenshot_20260703-194614.Instagram.png" alt="A memory of us" loading="lazy">
+              <figcaption>that day we laughed too much</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./Screenshot_20260703-194614.Instagram.png" alt="A memory of us" loading="lazy">
+              <figcaption>that day we laughed too much</figcaption>
+            </figure>
+            <figure class="heart-tile">
+              <img src="./1777201714374.png" alt="A memory of us" loading="lazy">
+              <figcaption>that day we laughed too much</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./1777201714374.png" alt="A memory of us" loading="lazy">
+              <figcaption>that day we laughed too much</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
       <div class="btn-row">
@@ -1001,11 +1171,13 @@
       <div class="heart-burst">✦ ✦ ✦</div>
       <h1>You just made my <span class="highlight">whole life</span></h1>
       <div class="divider"></div>
-      <p class="sub">Happy Birthday, my <span class="script">Keeks</span>.<br>
+      <p class="sub">Happy Birthday, <span class="script">Keeks</span>.<br>
       Thank you for saying yes to my love, to our dates, and now — to forever.<br><br>
       Here's to turf dates, temple visits, and a whole lifetime of memories as husband and wife, my September queen. I love you.</p>
     </div>
   </div>
+
+  <img class="floating-bottom-left" src="./Black_White_Minimalist_Professional_Initial_Logo-removebg-preview.png" alt="Keeks celebration" loading="lazy" aria-hidden="true">
 
 </div>
 
@@ -1070,6 +1242,97 @@ musicToggle.addEventListener('click', () => {
   iconStatic.style.display = musicPlaying ? 'none' : 'block';
   iconPlaying.style.display = musicPlaying ? 'block' : 'none';
 });
+
+/* ================= Synced lyric ticker with letter-by-letter animation ================= */
+const lyricsData = [
+  { time: 0,   text: "அமைதியில் நீ வாழவே பூவே" },
+  { time: 4,   text: "இரைச்சலை நான் தங்குவேன்" },
+  { time: 9,  text: "எனக்கென நீ போதுமே மானே" },
+  { time: 14,  text: "அரசனை போல் வாழுவேன்" },
+  { time: 19,  text: "சிடு சிடு என்றாலும்தினம் என்னை கொன்றாலும்" },
+  { time: 22,  text: "என் காதல் மாறாதடி" },
+  { time: 27,  text: "விடு விடு என்றாலும்" },
+  { time: 29,  text: "விழகிட சொன்னாலும்" },
+  { time: 32,  text: "என் காதல் தீராதடி" },
+  {time: 35,  text: "வாழும் நாள் எல்லாம்" },
+  { time: 39,  text: "நீ காணும் தூரத்தில்" },
+  { time: 42,  text: "வாழ்வேனே! நான் வாழ்வேனே" },
+  { time: 46,  text: "காற்றில் பூ பூக்கும்" },
+  { time: 49,  text: "உன் வாசம் நான் வாங்கி" },
+    { time: 53,  text: "சேர்ப்பேனே நான் சேர்ப்பேனே" },
+  { time: 56,  text: "வீட்டில் உன் பின்னே" },
+  // { time: 63,  text: "வாழும் நாள் எல்லாம்" }
+];
+
+const lyricsOverlay = document.getElementById('lyricsOverlay');
+const lyricPrevEl = document.getElementById('lyricPrev');
+const lyricCurrentEl = document.getElementById('lyricCurrent');
+const lyricNextEl = document.getElementById('lyricNext');
+let activeLyricIndex = -1;
+let typingTimeout = null;
+let currentTypingText = '';
+
+function findLyricIndex(t){
+  let idx = -1;
+  for(let i=0;i<lyricsData.length;i++){
+    if(lyricsData[i].time <= t) idx = i;
+    else break;
+  }
+  return idx;
+}
+
+function typeLetterByLetter(text, element, speed = 45) {
+  if (typingTimeout) clearTimeout(typingTimeout);
+  
+  element.textContent = '';
+  currentTypingText = text;
+  let i = 0;
+
+  function type() {
+    if (i < text.length) {
+      element.textContent = text.substring(0, i + 1);
+      i++;
+      typingTimeout = setTimeout(type, speed);
+    }
+  }
+  type();
+}
+
+function renderLyric(idx){
+  // Prev and next stay instant
+  lyricPrevEl.textContent = idx > 0 ? lyricsData[idx-1].text : '';
+  lyricNextEl.textContent = idx >= 0 && idx < lyricsData.length-1 ? lyricsData[idx+1].text : '';
+
+  const newText = idx >= 0 ? lyricsData[idx].text : '';
+  
+  // Trigger typing animation for current lyric
+  lyricCurrentEl.classList.add('swap');
+  
+  setTimeout(() => {
+    lyricCurrentEl.classList.remove('swap');
+    typeLetterByLetter(newText, lyricCurrentEl);
+  }, 220);
+}
+
+bgMusic.addEventListener('timeupdate', () => {
+  if(!musicPlaying){ 
+    lyricsOverlay.classList.remove('visible'); 
+    return; 
+  }
+  lyricsOverlay.classList.add('visible');
+  
+  const idx = findLyricIndex(bgMusic.currentTime);
+  if(idx !== activeLyricIndex){
+    activeLyricIndex = idx;
+    renderLyric(idx);
+  }
+});
+
+bgMusic.addEventListener('pause', () => lyricsOverlay.classList.remove('visible'));
+bgMusic.addEventListener('play', () => { 
+  if(lyricsData.length) lyricsOverlay.classList.add('visible'); 
+});
+
 /* ================= Screen navigation ================= */
 const screens = document.querySelectorAll('.screen');
 const dots = document.querySelectorAll('.progress span');
