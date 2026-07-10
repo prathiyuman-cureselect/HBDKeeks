@@ -1164,7 +1164,7 @@ Indha chinna chinna dreams i dont know unakku yen enna pudikala but i swear you 
       No more keeping it to myself ‚Äî here it is, exactly as honestly as I know how to say it.</p>
       <div class="btn-row" id="row4">
         <button class="btn-primary" onclick="goTo(6)">Accept</button>
-        <button class="btn-dodge" id="rejectBtn">Reject</button>
+        <button class="btn-dodge" id="rejectBtn">Live with Memories</button>
       </div>
       <p class="note">psst ‚Äî that other button is a little shy</p>
     </div>
@@ -1222,7 +1222,7 @@ You may never know it, but you are the only person who made my world beautiful‚Ä
       So Keeks, <span class="highlight">will you marry me</span>?</p>
       <div class="btn-row" id="row6">
         <button class="btn-primary" onclick="goTo(7)">Yes, I'll marry you</button>
-        <button class="btn-dodge" id="marryNoBtn">No</button>
+        <button class="btn-dodge" id="marryNoBtn">Live with Memories</button>
       </div>
       <p class="note">this button is the shiest one yet ‚Äî it knows the answer already</p>
     </div>
@@ -1265,13 +1265,14 @@ You may never know it, but you are the only person who made my world beautiful‚Ä
               <img src="./Screenshot_20240422-160927.png" alt="A memory of us" loading="lazy">
               <figcaption>us, being us</figcaption>
             </figure>
-            <figure class="heart-tile">
-              <img src="./1776993965997.png" alt="A memory of us" loading="lazy">
-              <figcaption>one of my favorites</figcaption>
-            </figure>
+           
             <figure class="heart-tile">
               <img src="./Screenshot_20260608-104309.Instagram.png" alt="A memory of us" loading="lazy">
               <figcaption>just you and me</figcaption>
+            </figure>
+             <figure class="heart-tile">
+              <img src="./IMG_20260106_203414795~2.jpg" alt="A memory of us" loading="lazy">
+              <figcaption>one of my favorites</figcaption>
             </figure>
              <figure class="heart-tile">
               <img src="./Screenshot_20240505-220954.png" alt="A memory of us" loading="lazy">
@@ -1303,7 +1304,7 @@ You may never know it, but you are the only person who made my world beautiful‚Ä
               <figcaption>that day we laughed too much</figcaption>
             </figure>
              <figure class="heart-tile">
-              <img src="./Screenshot_20260703-194614.Instagram.png" alt="A memory of us" loading="lazy">
+              <img src="./1776993965997.png" alt="A memory of us" loading="lazy">
               <figcaption>that day we laughed too much</figcaption>
             </figure>
             <figure class="heart-tile">
@@ -1328,7 +1329,7 @@ You may never know it, but you are the only person who made my world beautiful‚Ä
   <div class="screen final" id="screen8">
     <div class="card">
       <div class="heart-burst">‚ú¶ ‚ú¶ ‚ú¶</div>
-      <div class="final-heart-wrap" aria-hidden="true">
+      <!-- <div class="final-heart-wrap" aria-hidden="true">
         <svg class="final-heart" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id="heartGradient" x1="0" x2="1" y1="0" y2="1">
@@ -1340,14 +1341,14 @@ You may never know it, but you are the only person who made my world beautiful‚Ä
           <path class="heart-shape" d="M100 170 C40 130, 20 100, 50 70 C70 50, 100 60, 100 90 C100 60, 130 50, 150 70 C180 100, 160 130,100 170 Z"/>
           <path class="heart-outline" d="M100 170 C40 130, 20 100, 50 70 C70 50, 100 60, 100 90 C100 60, 130 50, 150 70 C180 100, 160 130,100 170 Z"/>
         </svg>
-      </div>
+      </div> -->
       <h1>You just made my <span class="highlight">whole life</span></h1>
       <div class="divider"></div>
       <p class="sub">Happy Birthday, <span class="script">Keeks</span>.<br>
-Thank you for saying yes to my love, to our dates, and now ‚Äî to forever.<br><br>
-Your happiness is where I find my life, and I'll cherish it every single day.<br>
-No matter what life brings, I'll always stand by your side through every moment and every situation.<br>
-I'll keep loving you, choosing you, and dreaming of our forever, my September queen. ‚ù§Ô∏è</p>
+Keerthy, unakku eppo en mela nambikkai varutho, "ivan nalla paiyan" nu oru naal un manasu sollutho, appo vandhu sollu... naan andha naalukkaaga kaathiruppen.
+Andha naal varaamal ponaalum, unnodu irundha ovvoru ninaivaiyum nenachittu, adhu en one-side love oda azhagana vaazhkai nu nenachu kaathiruppen.
+Indha moonu varushathula, nee en kitta pesa maatiya nu azhutha naatkal dhaan adhigam; aana ennala mudinjadhu unnai nesikkaradhum, kaathirukkaradhum dhaan.
+En kadaisi moochu varaikkum naan unnai edhirpaarthu kaathiruppen. yenna en kaadhalukku mudivu irukkalam, aana un mela irukkura anbu-ku mudive illa.
     </div>
   </div>
 
@@ -1814,9 +1815,10 @@ function makeDodger(btn){
     if(isRoaming) runAway();
   });
 }
-makeDodger(document.getElementById('rejectBtn'));
-makeDodger(document.getElementById('noBtn'));
-makeDodger(document.getElementById('marryNoBtn'));
+['rejectBtn', 'noBtn', 'marryNoBtn'].forEach((id) => {
+  const btn = document.getElementById(id);
+  if (btn) makeDodger(btn);
+});
 
 /* ================= Fireworks on final screen (gold + rose palette) ================= */
 const fCanvas = document.getElementById('fireworkCanvas');

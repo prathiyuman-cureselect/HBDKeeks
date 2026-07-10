@@ -992,7 +992,7 @@
     </svg>
   </button>
 <audio id="bgMusic" loop autoplay playsinline preload="metadata">
-    <source src="./public/Sidu Sidu (3).mp3" type="audio/mpeg">
+    <source src="./Sidu Sidu (3).mp3" type="audio/mpeg">
   </audio>
 
   <!-- Synced lyric ticker: shows the current line while the song plays -->
@@ -1141,8 +1141,8 @@ Indha chinna chinna dreams i dont know unakku yen enna pudikala but i swear you 
   <div class="video-transition-overlay" id="videoTransitionOverlay" aria-hidden="true">
     <div class="love-bg-layer" id="transitionLoveLayer"></div>
     <div class="burst-layer" id="transitionBurstLayer"></div>
-    <img class="video-overlay-img" src="./public/Black_White_Minimalist_Professional_Initial_Logo-removebg-preview.png" alt="Birthday greeting" loading="lazy">
-    <video id="transitionVideo" playsinline autoplay preload="metadata" src="./public/InShot_20260709_105201437.mp4"></video>
+    <img class="video-overlay-img" src="./Black_White_Minimalist_Professional_Initial_Logo-removebg-preview.png" alt="Birthday greeting" loading="lazy">
+    <video id="transitionVideo" playsinline autoplay preload="metadata" src="./InShot_20260709_105201437.mp4"></video>
   </div>
 
   <!-- Screen 4: Together 4 - The Proposal -->
@@ -1303,7 +1303,7 @@ You may never know it, but you are the only person who made my world beautifulâ€
               <figcaption>that day we laughed too much</figcaption>
             </figure>
              <figure class="heart-tile">
-              <img src="./Screenshot_20260703-194614.Instagram.png" alt="A memory of us" loading="lazy">
+              <img src="./IMG_20260106_203414795~2.jpg" alt="A memory of us" loading="lazy">
               <figcaption>that day we laughed too much</figcaption>
             </figure>
             <figure class="heart-tile">
@@ -1814,9 +1814,10 @@ function makeDodger(btn){
     if(isRoaming) runAway();
   });
 }
-makeDodger(document.getElementById('rejectBtn'));
-makeDodger(document.getElementById('noBtn'));
-makeDodger(document.getElementById('marryNoBtn'));
+['rejectBtn', 'noBtn', 'marryNoBtn'].forEach((id) => {
+  const btn = document.getElementById(id);
+  if (btn) makeDodger(btn);
+});
 
 /* ================= Fireworks on final screen (gold + rose palette) ================= */
 const fCanvas = document.getElementById('fireworkCanvas');
