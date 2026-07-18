@@ -132,6 +132,67 @@
     100%{ transform:translate(var(--hx),var(--hy)) scale(1.1); opacity:0; }
   }
 
+  .glow-orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(12px);
+    opacity:0.28;
+    pointer-events:none;
+    mix-blend-mode:screen;
+    z-index:1;
+    animation:orbFloat 14s ease-in-out infinite;
+  }
+  .orb-a{
+    width:260px;
+    height:260px;
+    top:-90px;
+    left:-80px;
+    background:radial-gradient(circle, rgba(236,203,141,0.28), transparent 72%);
+  }
+  .orb-b{
+    width:300px;
+    height:300px;
+    bottom:-90px;
+    right:-70px;
+    background:radial-gradient(circle, rgba(217,160,174,0.24), transparent 72%);
+    animation-duration:18s;
+    animation-delay:-4s;
+  }
+  @keyframes orbFloat{
+    0%,100%{ transform:translate3d(0,0,0) scale(1); }
+    50%{ transform:translate3d(28px,22px,0) scale(1.08); }
+  }
+
+  .sparkle-layer{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .sparkle{
+    position:absolute;
+    width:10px;
+    height:10px;
+    opacity:0;
+    color:var(--gold-bright);
+    animation:sparkleDrift 2.8s linear forwards;
+  }
+  .sparkle::before, .sparkle::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:currentColor;
+  }
+  .sparkle::before{ transform:scale(1.55); opacity:0.65; }
+  .sparkle::after{ transform:scale(0.35); opacity:1; }
+  @keyframes sparkleDrift{
+    0%{ transform:translate3d(0,0,0) scale(0.2); opacity:0; }
+    18%{ opacity:1; }
+    100%{ transform:translate3d(var(--dx), var(--dy), 0) scale(1); opacity:0; }
+  }
+
   /* ---------- Progress: dots + glowing thread that fills as the story advances ---------- */
   .progress-wrap{
     position:absolute;
@@ -698,6 +759,19 @@
   }
   .btn-primary:active{ transform:translateY(0); }
 
+  .btn-secondary{
+    background:rgba(244,236,221,0.08);
+    color:var(--gold-bright);
+    border:1px solid rgba(201,163,95,0.3);
+    box-shadow:none;
+  }
+  .btn-secondary:hover{
+    transform:translateY(-2px);
+    background:rgba(244,236,221,0.14);
+    border-color:var(--gold);
+  }
+  .btn-secondary:active{ transform:translateY(0); }
+
   .btn-dodge{
     background:rgba(19,14,28,0.88);
     color:var(--cream);
@@ -1184,6 +1258,9 @@
 
   <div class="bg-gradient"></div>
   <div class="grid-layer"></div>
+  <div class="glow-orb orb-a"></div>
+  <div class="glow-orb orb-b"></div>
+  <div class="sparkle-layer" id="sparkleLayer"></div>
 
   <div class="motif-layer">
     <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1260,16 +1337,9 @@
       <rect class="bar bar3" x="17" y="9" width="3" height="8" rx="1" fill="currentColor"/>
     </svg>
   </button>
-<audio id="bgMusic" loop playsinline preload="metadata">
+<audio id="bgMusic" playsinline preload="metadata">
     <source src="./Sidu Sidu (3).mp3" type="audio/mpeg">
   </audio>
-
-  <!-- Synced lyric ticker: shows the current line while the song plays -->
-  <div class="lyrics-overlay" id="lyricsOverlay">
-    <p class="lyric-prev" id="lyricPrev"></p>
-    <p class="lyric-current" id="lyricCurrent"></p>
-    <p class="lyric-next" id="lyricNext"></p>
-  </div>
 
   <div class="progress-wrap">
     <div class="thread"><div class="thread-fill" id="threadFill"></div></div>
@@ -1283,6 +1353,7 @@
       <span data-i="6"></span>
       <span data-i="7"></span>
       <span data-i="8"></span>
+      <span data-i="9"></span>
     </div>
   </div>
 
@@ -1302,9 +1373,7 @@
       <span class="eyebrow">A birthday note, for you alone</span>
       <h1>Happy Birthday, <span class="highlight">Keerthy</span></h1>
       <div class="divider"></div>
-      <p class="sub">Somewhere between an ordinary September and this one, you became the softest, brightest part of my life.<br>
-      Today isn't just about the candles — it's about every quiet reason you're worth celebrating.<br>
-      So before anything else, Keeks: I hope this whole year loves you as much as I do.</p>
+      <p class="sub">My only wish is to see your beautiful smile until my very last breath. I pray that your journey as **Keerthiba Artistry** grows into one of the biggest and most admired makeup brands, bringing you the success you've always dreamed of. May your life be filled with endless happiness, love, good health, and beautiful moments. You deserve a future brighter than anything you can imagine, and I'll always be wishing the very best for you.</p>
       <div class="btn-row">
         <button class="btn-primary" onclick="goTo(1)">Continue</button>
       </div>
@@ -1326,8 +1395,10 @@
       <span class="eyebrow">Together 1 of 6</span>
       <h1>Do you know how <span class="highlight">special</span> you've always been to me?</h1>
       <div class="divider"></div>
-      <p class="sub">On my heaviest days, your name crossing my mind was enough to make the weight feel smaller.<br>
-      You've been my calm in the middle of everything, and I don't think I've ever said that out loud.</p>
+      <p class="sub">Whenever a notification popped up saying,"Kee_ks liked your story" , "Kee_ks liked your message" , "Kee_ks sent you a message,"Those tiny notifications meant the world to me. They could brighten my entire day, and in those moments, I genuinely felt like the happiest man in the universe.
+But that happiness didn't last forever. Every time I saw your profile, your reposts, your highlights, or anything that reminded me of you, my eyes would fill with tears. how your inner child affected that you doesn't deserve the pain and tears you going through.
+Kee_ks, even with my very last breath,I never stop loving you, and never stop carrying you in my heart.
+</p>
       <div class="btn-row">
         <button class="btn-primary" onclick="goTo(2)">I didn't know</button>
       </div>
@@ -1427,13 +1498,12 @@ Indha chinna chinna dreams i dont know unakku yen enna pudikala but i swear you 
         </svg>
       </div>
       <span class="eyebrow">Together 5 of 6</span>
-      <h1>Keeks, will you accept my <span class="highlight">love</span>?</h1>
+      <h1>Keerthy Unakku enna <span class="highlight">Pudikuma </span>?</h1>
       <div class="divider"></div>
-      <p class="sub">I've kept this safe in my heart for so long, turning it over on nights I couldn't sleep.<br>
-      No more keeping it to myself — here it is, exactly as honestly as I know how to say it.</p>
+      <p class="sub">Yeppovachum ? Enna Paththii Yosichi Irukiya ?<br>
       <div class="btn-row" id="row4">
-        <button class="btn-primary" onclick="goTo(6)">Accept</button>
-        <button class="btn-dodge" id="rejectBtn">Live with Memories</button>
+        <button class="btn-primary" onclick="goTo(6)">Yes</button>
+        <button class="btn-dodge" id="rejectBtn">NO</button>
       </div>
       <p class="note">psst — that other button is a little shy</p>
     </div>
@@ -1451,12 +1521,10 @@ Indha chinna chinna dreams i dont know unakku yen enna pudikala but i swear you 
       <span class="eyebrow">Together 6 of 6</span>
       <h1>Keeks, <span class="script">enna kalyanam</span> pannikiruya?</h1>
       <div class="divider"></div>
-      <p class="sub">Ovoru naalum un kitta irundhu oru message varuma nu wait pannitu iruken... unakku message panna romba aasai, aana nee en message-ah kooda paaka maatiyo nu bayama iruku.
-Nee busy, work pressure, un situation ellam enakku puriyum... adhanala unna naan oru naalum thappa nenachadhe illa.
-Enakku nee eppovume oru Diamond dhaan Keerthy... aana unna afford panna naan innum worthy illa, lucky-yum illa pola.
-Aana naan give up panna maaten... oru naal Billionaire aagi, en Diamond-a deserve panra alavukku ennaye maathikka try pannitu iruken.</p>
+      <p class="sub">Unta Kekanum Nu aasa But nee ena Thappa nenachidakudathu aprm ena Block Pannida Kudathu nu tha yethum Kekala Keerthy, Dhayava senji Block Mattum panidatha keerthy, ini na Story, status, message nu unna disturb panna matten promise
+</p>
       <div class="btn-row" id="row6">
-        <button class="btn-primary" onclick="goTo(7)">Yes, I'll marry you</button>
+        <button class="btn-primary" onclick="goTo(7)">Please</button>
         <button class="btn-dodge" id="marryNoBtn">Live with Memories</button>
       </div>
       <p class="note">this button is the shiest one yet — it knows the answer already</p>
@@ -1580,10 +1648,33 @@ Aana naan give up panna maaten... oru naal Billionaire aagi, en Diamond-a deserv
       <h1>You just made my <span class="highlight">whole life</span></h1>
       <div class="divider"></div>
       <p class="sub">Happy Birthday, <span class="script">Keeks</span>.<br>
-Keerthy, unakku eppo en mela nambikkai varutho, "ivan nalla paiyan" nu oru naal un manasu sollutho, appo vandhu sollu... naan andha naalukkaaga kaathiruppen.
-Andha naal varaamal ponaalum, unnodu irundha ovvoru ninaivaiyum nenachittu, adhu en one-side love oda azhagana vaazhkai nu nenachu kaathiruppen.
-Indha moonu varushathula, nee en kitta pesa maatiya nu azhutha naatkal dhaan adhigam; aana ennala mudinjadhu unnai nesikkaradhum, kaathirukkaradhum dhaan.
-En kadaisi moochu varaikkum naan unnai edhirpaarthu kaathiruppen. yenna en kaadhalukku mudivu irukkalam, aana un mela irukkura anbu-ku mudive illa.
+        Na Unna nenachi Compose Panna Song download panni ketu Paru Keerthy<br>
+        .<br>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="downloadSong()">Download song</button>
+        <button class="btn-primary" onclick="goTo(9)">One last request</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen9">
+    <div class="card">
+      <div class="ornament">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="10.5" stroke-width="1"/>
+          <line x1="17" y1="1" x2="17" y2="6" stroke-width="1"/>
+          <line x1="17" y1="28" x2="17" y2="33" stroke-width="1"/>
+          <line x1="1" y1="17" x2="6" y2="17" stroke-width="1"/>
+          <line x1="28" y1="17" x2="33" y2="17" stroke-width="1"/>
+        </svg>
+      </div>
+      <span class="eyebrow">One last request</span>
+      <h1>Please don't <span class="highlight">block me</span></h1>
+      <div class="divider"></div>
+      <p class="sub">I know I may have said too much, but this heart is still sincere. Nee ena solratha irunthalum enta sollidu kandipa na unna ini disturb panna matten , message, story, notes, status yethum unna hurt pandramari poda maten please bock mattum Pannatha Please <br>Keep smiling and keep shining, because you deserve nothing but the best. I sincerely wish Keerthiba Artistry becomes a successful and flourishing venture. ✨</p>
+      <div class="btn-row">
+        <!-- <button class="btn-primary" onclick="goTo(0)">Start again</button> -->
+      </div>
     </div>
   </div>
 
@@ -1592,6 +1683,15 @@ En kadaisi moochu varaikkum naan unnai edhirpaarthu kaathiruppen. yenna en kaadh
 </div>
 
 <script>
+function downloadSong(){
+  const link = document.createElement('a');
+  link.href = './Kee.mp3';
+  link.download = 'Keeks-song.mp3';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
 /* ================= Seal every card like a letter ================= */
 document.querySelectorAll('.screen .card').forEach((card, i) => {
   const seal = document.createElement('span');
@@ -1652,8 +1752,12 @@ const bgMusic = document.getElementById('bgMusic');
 const musicToggle = document.getElementById('musicToggle');
 const iconStatic = document.getElementById('musicIconStatic');
 const iconPlaying = document.getElementById('musicIconPlaying');
+const musicTracks = ['./Sidu Sidu (3).mp3', './Neeyum-Naanum-Anbe-MassTamilan.com.mp3'];
 let musicPlaying = false; // start paused until the first story screen is reached
 let musicPausedForVideo = false;
+let currentMusicTrack = 0;
+let musicAutoStartAllowed = true;
+let musicHasBeenStarted = false;
 
 function syncMusicUI(isPlaying){
   musicToggle.classList.toggle('playing', isPlaying);
@@ -1663,10 +1767,11 @@ function syncMusicUI(isPlaying){
 syncMusicUI(false);
 
 function tryAutoplay() {
-  if (musicPlaying) return;
+  if (musicPlaying || !musicAutoStartAllowed) return;
 
   bgMusic.play().then(() => {
     musicPlaying = true;
+    musicHasBeenStarted = true;
     syncMusicUI(true);
   }).catch(() => {
     // Autoplay blocked - stay paused until user interacts with toggle
@@ -1676,10 +1781,50 @@ function tryAutoplay() {
 }
 
 function startMusicFromScreenOne(index) {
-  if (index === 1 && !musicPlaying) {
+  if (index === 1 && !musicHasBeenStarted && musicAutoStartAllowed) {
     tryAutoplay();
   }
 }
+
+function setMusicTrack(index, autoplay = false) {
+  if (index < 0 || index >= musicTracks.length) return;
+
+  currentMusicTrack = index;
+  bgMusic.pause();
+  bgMusic.src = musicTracks[index];
+  bgMusic.load();
+  bgMusic.currentTime = 0;
+
+  activeLyricIndex = -1;
+  lyricCurrentEl.textContent = '';
+  lyricPrevEl.textContent = '';
+  lyricNextEl.textContent = '';
+  lyricsOverlay.classList.remove('visible');
+
+  if (autoplay || musicPlaying) {
+    bgMusic.play().then(() => {
+      musicPlaying = true;
+      syncMusicUI(true);
+    }).catch(() => {
+      musicPlaying = false;
+      syncMusicUI(false);
+    });
+  } else {
+    musicPlaying = false;
+    syncMusicUI(false);
+  }
+}
+
+function switchToSecondSong() {
+  if (currentMusicTrack === 1) return;
+  setMusicTrack(1, true);
+}
+
+bgMusic.addEventListener('ended', () => {
+  if (currentMusicTrack === 0) {
+    switchToSecondSong();
+  }
+});
 
 // Toggle functionality
 musicToggle.addEventListener('click', () => {
@@ -1693,103 +1838,24 @@ musicToggle.addEventListener('click', () => {
   if (musicPlaying) {
     bgMusic.pause();
     musicPlaying = false;
+    musicAutoStartAllowed = false;
   } else {
-    bgMusic.play().catch(() => {});
-    musicPlaying = true;
+    musicAutoStartAllowed = true;
+    bgMusic.play().then(() => {
+      musicPlaying = true;
+      musicHasBeenStarted = true;
+      syncMusicUI(true);
+    }).catch(() => {
+      musicPlaying = false;
+      syncMusicUI(false);
+    });
   }
 
   syncMusicUI(musicPlaying);
 });
 
-/* ================= Synced lyric ticker with letter-by-letter animation ================= */
-const lyricsData = [
-  { time: 0,   text: "அமைதியில் நீ வாழவே பூவே" },
-  { time: 4,   text: "இரைச்சலை நான் தங்குவேன்" },
-  { time: 9,  text: "எனக்கென நீ போதுமே மானே" },
-  { time: 14,  text: "அரசனை போல் வாழுவேன்" },
-  { time: 19,  text: "சிடு சிடு என்றாலும்தினம் என்னை கொன்றாலும்" },
-  { time: 22,  text: "என் காதல் மாறாதடி" },
-  { time: 27,  text: "விடு விடு என்றாலும்" },
-  { time: 29,  text: "விழகிட சொன்னாலும்" },
-  { time: 32,  text: "என் காதல் தீராதடி" },
-  {time: 35,  text: "வாழும் நாள் எல்லாம்" },
-  { time: 39,  text: "நீ காணும் தூரத்தில்" },
-  { time: 42,  text: "வாழ்வேனே! நான் வாழ்வேனே" },
-  { time: 46,  text: "காற்றில் பூ பூக்கும்" },
-  { time: 49,  text: "உன் வாசம் நான் வாங்கி" },
-    { time: 53,  text: "சேர்ப்பேனே நான் சேர்ப்பேனே" },
-  { time: 56,  text: "வீட்டில் உன் பின்னே" },
-  // { time: 63,  text: "வாழும் நாள் எல்லாம்" }
-];
-
-const lyricsOverlay = document.getElementById('lyricsOverlay');
-const lyricPrevEl = document.getElementById('lyricPrev');
-const lyricCurrentEl = document.getElementById('lyricCurrent');
-const lyricNextEl = document.getElementById('lyricNext');
+/* ================= Audio playback only ================= */
 let activeLyricIndex = -1;
-let typingTimeout = null;
-let currentTypingText = '';
-
-function findLyricIndex(t){
-  let idx = -1;
-  for(let i=0;i<lyricsData.length;i++){
-    if(lyricsData[i].time <= t) idx = i;
-    else break;
-  }
-  return idx;
-}
-
-function typeLetterByLetter(text, element, speed = 45) {
-  if (typingTimeout) clearTimeout(typingTimeout);
-  
-  element.textContent = '';
-  currentTypingText = text;
-  let i = 0;
-
-  function type() {
-    if (i < text.length) {
-      element.textContent = text.substring(0, i + 1);
-      i++;
-      typingTimeout = setTimeout(type, speed);
-    }
-  }
-  type();
-}
-
-function renderLyric(idx){
-  // Prev and next stay instant
-  lyricPrevEl.textContent = idx > 0 ? lyricsData[idx-1].text : '';
-  lyricNextEl.textContent = idx >= 0 && idx < lyricsData.length-1 ? lyricsData[idx+1].text : '';
-
-  const newText = idx >= 0 ? lyricsData[idx].text : '';
-  
-  // Trigger typing animation for current lyric
-  lyricCurrentEl.classList.add('swap');
-  
-  setTimeout(() => {
-    lyricCurrentEl.classList.remove('swap');
-    typeLetterByLetter(newText, lyricCurrentEl);
-  }, 220);
-}
-
-bgMusic.addEventListener('timeupdate', () => {
-  if(!musicPlaying){ 
-    lyricsOverlay.classList.remove('visible'); 
-    return; 
-  }
-  lyricsOverlay.classList.add('visible');
-  
-  const idx = findLyricIndex(bgMusic.currentTime);
-  if(idx !== activeLyricIndex){
-    activeLyricIndex = idx;
-    renderLyric(idx);
-  }
-});
-
-bgMusic.addEventListener('pause', () => lyricsOverlay.classList.remove('visible'));
-bgMusic.addEventListener('play', () => { 
-  if(lyricsData.length) lyricsOverlay.classList.add('visible'); 
-});
 
 /* ================= Screen navigation ================= */
 const screens = document.querySelectorAll('.screen');
@@ -1894,6 +1960,24 @@ function goTo(index){
 
   startMusicFromScreenOne(index);
 }
+
+/* ================= Floating sparkles ================= */
+const sparkleLayer = document.getElementById('sparkleLayer');
+function spawnSparkle(){
+  const s = document.createElement('div');
+  s.className = 'sparkle';
+  const size = 8 + Math.random() * 10;
+  s.style.width = size + 'px';
+  s.style.height = size + 'px';
+  s.style.left = Math.random() * 100 + 'vw';
+  s.style.top = Math.random() * 100 + 'vh';
+  s.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
+  s.style.setProperty('--dy', (-120 - Math.random() * 80) + 'px');
+  s.style.color = Math.random() > 0.5 ? 'var(--gold-bright)' : 'var(--rose)';
+  sparkleLayer.appendChild(s);
+  setTimeout(() => s.remove(), 3200);
+}
+setInterval(spawnSparkle, 700);
 
 /* ================= Falling petals ================= */
 const petalLayer = document.getElementById('petalLayer');
